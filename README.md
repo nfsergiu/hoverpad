@@ -19,7 +19,7 @@ One Swift file, no dependencies, no Xcode project.
 
 ## Download
 
-Grab `Hoverpad-<version>.zip` from [Releases](https://github.com/nfsergiu/hoverpad/releases/latest), unzip, and move `Hoverpad.app` to `/Applications`. Universal (Apple silicon + Intel), macOS 13+.
+Grab `Hoverpad-<version>.dmg` from [Releases](https://github.com/nfsergiu/hoverpad/releases/latest), open it, and drag `Hoverpad.app` onto `Applications` (a `.zip` is there too). Universal (Apple silicon + Intel), macOS 13+.
 
 The app is ad-hoc signed, not notarized, so macOS blocks the first launch. Clear the quarantine flag:
 

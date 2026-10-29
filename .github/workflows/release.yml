@@ -19,7 +19,7 @@ jobs:
           sudo xcode-select -s /Applications/Xcode_26.6.app
           swiftc --version
 
-      - name: Build and zip
+      - name: Build, zip and dmg
         env:
           REF_TYPE: ${{ github.ref_type }}
           REF_NAME: ${{ github.ref_name }}
@@ -27,8 +27,13 @@ jobs:
           if [ "$REF_TYPE" = tag ]; then VERSION="${REF_NAME#v}"; else VERSION="dev-$(git rev-parse --short HEAD)"; fi
           VERSION="$VERSION" ./build.sh
           ZIP="Hoverpad-$VERSION.zip"
+          DMG="Hoverpad-$VERSION.dmg"
           ditto -c -k --keepParent Hoverpad.app "$ZIP"
+          # Drag-to-install image: the app next to an /Applications shortcut.
+          mkdir dmg && cp -R Hoverpad.app dmg/ && ln -s /Applications dmg/Applications
+          hdiutil create -volname Hoverpad -srcfolder dmg -fs HFS+ -format UDZO -ov "$DMG"
           echo "ZIP=$ZIP" >> "$GITHUB_ENV"
+          echo "DMG=$DMG" >> "$GITHUB_ENV"
 
       - name: Publish release
         if: github.ref_type == 'tag'
@@ -37,15 +42,15 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "$ZIP" --clobber
+            gh release upload "$TAG" "$DMG" "$ZIP" --clobber
           else
-            gh release create "$TAG" "$ZIP" --title "$TAG" --generate-notes --verify-tag
+            gh release create "$TAG" "$DMG" "$ZIP" --title "$TAG" --generate-notes --verify-tag
           fi
 
       - name: Upload artifact
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@v7
         with:
-          path: ${{ env.ZIP }}
+          path: ${{ env.DMG }}
           archive: false
           if-no-files-found: error
