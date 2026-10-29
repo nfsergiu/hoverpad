@@ -4,6 +4,8 @@ Tiny native macOS scratchpad that floats over everything, **even full-screen app
 
 One Swift file, no dependencies, no Xcode project.
 
+![Hoverpad floating over a full-screen terminal: hotkey shows the pad, copy a command from a code block, paste and run it](docs/demo.gif)
+
 ## Features
 
 - Always on top, on every Space, including over full-screen apps
@@ -15,7 +17,21 @@ One Swift file, no dependencies, no Xcode project.
 - Plain text that stays byte-exact (no smart quotes or dashes), so pasted commands still run
 - Menu-bar icon, no Dock icon; everything auto-saves
 
-## Install
+## Download
+
+Grab `Hoverpad-<version>.zip` from [Releases](https://github.com/nfsergiu/hoverpad/releases/latest), unzip, and move `Hoverpad.app` to `/Applications`. Universal (Apple silicon + Intel), macOS 13+.
+
+The app is ad-hoc signed, not notarized, so macOS blocks the first launch. Clear the quarantine flag:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Hoverpad.app
+```
+
+or try to open it once, then click **Open Anyway** in System Settings → Privacy & Security.
+
+To start it at login, enable **Start at Login** from the menu-bar icon.
+
+## Build from source
 
 Requires macOS 13+ and the Xcode Command Line Tools (`xcode-select --install`).
 
